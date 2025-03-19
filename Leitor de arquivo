@@ -1,13 +1,94 @@
+/*
+Escrever um programa que leia o arquivo dados.txt, escreva os valores na tela.
+Contar a quantidade de valores
+Identificar a quantidade de números pares, impares, positivos, negativos e zero.
+Contar a quantidade de vezes que cada inteiro está presente no arquivo.
+*/
 #include <stdio.h>
 #include <stdlib.h>
-#include <io.h>
-char linha[50];
-int i;
-int main(){
 
-    FILE *arq ;
-    arq = fopen("teste.txt", "w");
-    fprintf(arq, "TESTE DE ARQUIVO\n");
-    fclose(arq);
+#define Max_Valors 1000
+
+int main() {
+    FILE *file;
+    int numeros[Max_Valors];
+    int count = 0;
+    int pares = 0, impares = 0, positivos = 0, negativos = 0, zeros = 0;
+    int ocorrencias[Max_Valors] = {0};
+
+    file = fopen("dados.txt", "r");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo 'dados.txt'.\n");
+        return 1;
+    } else {
+        printf("Arquivo 'dados.txt' aberto com sucesso!\n");
+    }
+
+    while (fscanf(file, "%d", &numeros[count]) == 1) {
+        printf("Lendo número: %d\n", numeros[count]); 
+        count++;
+
+        if (numeros[count - 1] % 2 == 0) {
+            pares++;
+        } else {
+            impares++;
+        }
+
+        if (numeros[count - 1] > 0) {
+            positivos++;
+        } else if (numeros[count - 1] < 0) {
+            negativos++;
+        } else {
+            zeros++;
+        }
+
+        for (int i = 0; i < count - 1; i++) {
+            if (numeros[i] == numeros[count - 1]) {
+                ocorrencias[i]++;
+                break;
+            }
+        }
+
+        if (ocorrencias[count - 1] == 0) {
+            ocorrencias[count - 1] = 1;
+        }
+    }
+
+    fclose(file);
+
+    if (count == 0) {
+        printf("Nenhum número foi lido do arquivo 'dados.txt'. Verifique o conteúdo do arquivo.\n");
+        return 1;
+    }
+
+    printf("\nValores lidos do arquivo:\n");
+    for (int i = 0; i < count; i++) {
+        printf("%d ", numeros[i]);
+    }
+    printf("\n");
+
+    printf("\nQuantidade de valores: %d\n", count);
+    printf("Quantidade de números pares: %d\n", pares);
+    printf("Quantidade de números ímpares: %d\n", impares);
+    printf("Quantidade de números positivos: %d\n", positivos);
+    printf("Quantidade de números negativos: %d\n", negativos);
+    printf("Quantidade de zeros: %d\n", zeros);
+
+    printf("\nContagem de ocorrências de cada número:\n");
+    for (int i = 0; i < count; i++) {
+        int alreadyPrinted = 0;
+
+        for (int j = 0; j < i; j++) {
+            if (numeros[i] == numeros[j]) {
+                alreadyPrinted = 1;
+                break;
+            }
+        }
+
+        if (!alreadyPrinted) {
+            printf("Número %d: %d vez(es)\n", numeros[i], ocorrencias[i]);
+        }
+    }
+
     return 0;
 }
