@@ -1,0 +1,13 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <io.h>
+char linha[50];
+int i;
+int main(){
+
+    FILE *arq ;
+    arq = fopen("teste.txt", "w");
+    fprintf(arq, "TESTE DE ARQUIVO\n");
+    fclose(arq);
+    return 0;
+}
